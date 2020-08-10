@@ -59,6 +59,14 @@ class CoinPlayingMode(PlayingMode):
         if len(self.user_cars) <= 1 and self.end == False:
             self.now_time = time.time()
             self.end = True
+            if len(self.user_cars) == 1:
+                for car in self.user_cars:
+                    car.state = False
+                    self.detect_car_state(car)
+            self.print_result()
+            self.running = False
+            self.status = "GAMEOVER"
+        """
         if self.end and time.time() - self.now_time > 3 or len(self.user_cars) == 0:
             if len(self.user_cars) == 1:
                 for car in self.user_cars:
@@ -67,6 +75,7 @@ class CoinPlayingMode(PlayingMode):
             self.print_result()
             self.running = False
             self.status = "GAMEOVER"
+        """
 
     def creat_coins(self):
         if time.time() - self.creat_coin_time > 1.6:
