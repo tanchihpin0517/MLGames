@@ -5,5 +5,11 @@ if [ "$ver" != "3.7" ]; then
     exit 1
 fi
 
-#python MLGame.py -r -i ml_play_template.py arkanoid NORMAL 2
-python MLGame.py -r -m RacingCar 2 COIN
+SCRIPT='rule_based.py'
+
+#pythonsMLGame.py -r -i ml_play_template.py arkanoid NORMAL 2
+#python MLGame.py -r -m RacingCar 2 COIN
+#python MLGame.py -r -m RacingCar 1
+python MLGame.py -r -i $SCRIPT\
+                    -i $SCRIPT\
+                    RacingCar 2 COIN
