@@ -97,14 +97,40 @@ class MLPlay:
         sum_x = 0.0
         sum_y = 0.0
         N = 1000000.0
-        lane_candidate_num = 2
+        lane_candidate_num = 1
+        lane_candidate_max = 2
+        safe_dist = 160
         detect_range_x = 46
         detect_range_y = 120
         detect_range_x_front = 35
         detect_range_y_front_max = 120
         detect_range_y_front_min = 100
+        my_lane = -1
+        lane_width = 70
 
         lane_score = self.lane_rank()
+        for i in range(9):
+            l = i*lane_width
+            r = (i+1)*lane_width
+            if l <= self.car_pos[0] < r:
+                my_lane = i
+
+        best_lane = lane_score[0][0]
+        lane_score.sort(key = lambda s: s[0])
+        if (my_lane != best_lane):
+            dir_i = 0
+            if best_lane > my_lane:
+                dir_i = 1
+            else:
+                dir_i = -1
+            i = my_lane + dir_i
+            while (i != best_lane):
+                if lane_score[i][1] - self.car_pos[1] < safe_dist:
+                    lane_candidate_num = lane_candidate_max
+                i += dir_i
+        lane_score.sort(key = lambda s: s[1], reverse = True)
+
+        #print(f"{lane_score[0][1]}, {lane_score[1][1]}")
         chosen_lane = []
         for i in range(lane_candidate_num):
             land_x = lane_score[i][0]*70+35
@@ -138,7 +164,7 @@ class MLPlay:
         lane_score = []
         my_lane = -1
         score_of_coin = 80
-        coin_dist_norm = 140
+        coin_dist_norm = 175
 
         for i in range(9):
             l = i*lane_width
@@ -198,7 +224,6 @@ class MLPlay:
                     lane_score.append((i, 250+1 + coin_score))
                 else:
                     lane_score.append((i, 250 + coin_score))
-
 
         lane_score.sort(key = lambda s: s[1], reverse = True)
 
